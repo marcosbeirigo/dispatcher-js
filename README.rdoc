@@ -7,19 +7,21 @@ Dispatcher requires jQuery.
 
 == Usage
 
-Your page must have a meta tag called +page+. This tag should have the controller and action names.
+Your page body must have a data attribute called +page+. This attribute should have the controller and action names.
 
-  <meta name="page" content="users#index" />
+  <body data-page="users#index">
 
 Rails developers can use the helper below:
 
-  def dispatcher_tag
+  def dispatcher_page_attribute
     controller_name = controller.class.name.underscore
     controller_name.gsub!(/\//, "_")
     controller_name.gsub!(/_controller$/, "")
 
-    %[<meta name="page" content="#{controller_name}##{controller.action_name}" />]
+    "#{controller_name}##{controller.action_name}"
   end
+
+  <body data-page="<%= dispatcher_page_attribute %>"
 
 Then all you need to do is include <tt>dispatcher.js</tt>
 

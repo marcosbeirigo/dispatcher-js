@@ -1,6 +1,4 @@
 function prepare() {
-  $("meta[name=page]").remove();
-  $("head").append('<meta name="page" content="" />');
   Dispatcher.run();
   App.sample = {};
 };
@@ -8,7 +6,6 @@ function prepare() {
 new Test.Unit.Runner({
   setup: function() {
     prepare();
-    $("meta[name=page]").attr("content", "");
     App.sample = {};
     Dispatcher.before = null;
   },
@@ -39,7 +36,7 @@ new Test.Unit.Runner({
     var triggered = null;
 
     App.sample.after = function() { triggered = true; }
-    $("meta[name=page]").attr("content", "sample");
+    $("body").data("page", "sample");
     Dispatcher.run();
     assert(triggered);
   }},
@@ -49,7 +46,7 @@ new Test.Unit.Runner({
     var triggered = null;
 
     App.sample.before = function() { triggered = true; }
-    $("meta[name=page]").attr("content", "sample");
+    $("body").data("page", "sample");
     Dispatcher.run();
     assert(triggered);
   }},
@@ -59,7 +56,7 @@ new Test.Unit.Runner({
     var triggered = null;
 
     App.sample.index = function() { triggered = true; }
-    $("meta[name=page]").attr("content", "sample#index");
+    $("body").data("page", "sample#index");
 
     Dispatcher.run();
     assert(triggered);
@@ -75,7 +72,7 @@ new Test.Unit.Runner({
     App.sample.index = function() { triggers.push("action"); }
     App.sample.after = function() { triggers.push("after-controller"); }
 
-    $("meta[name=page]").attr("content", "sample#index");
+    $("body").data("page", "sample#index");
 
     Dispatcher.run();
     assertEqual("before, before-controller, action, after-controller, after", triggers.join(", "));
@@ -87,7 +84,7 @@ new Test.Unit.Runner({
 
     App.sample["new"] = function() { triggered = true; }
 
-    $("meta[name=page]").attr("content", "sample#create");
+    $("body").data("page", "sample#create");
 
     Dispatcher.run();
     assert(triggered);
@@ -99,7 +96,7 @@ new Test.Unit.Runner({
 
     App.sample["remove"] = function() { triggered = true; }
 
-    $("meta[name=page]").attr("content", "sample#destroy");
+    $("body").data("page", "sample#destroy");
 
     Dispatcher.run();
     assert(triggered);
@@ -111,15 +108,16 @@ new Test.Unit.Runner({
 
     App.sample["edit"] = function() { triggered = true; }
 
-    $("meta[name=page]").attr("content", "sample#update");
+    $("body").data("page", "sample#update");
 
     Dispatcher.run();
     assert(triggered);
   }},
 
-  // Raise error when no meta tag is found.
-  testRaiseErrorWhenNoMetaTagIsFound: function() { with(this) {
-    $("meta[name=page]").remove();
+  // Raise error when no page data attribute is found.
+  testRaiseErrorWhenNoPageDataIsFound: function() { with(this) {
+    $("body").data("page", "");
+    console.log($("body").data("page"));
     assertRaise(null, Dispatcher.run);
   }}
 });

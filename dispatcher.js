@@ -16,15 +16,15 @@
   };
 
   Dispatcher.run = function() {
-    var meta = $("head meta[name=page]")
-      , noMeta = 'No meta tag found. Use something like <meta name="page" content="controller#action" />'
+    var dataPage = $('body').data('page')
+      , noDataPage = 'No data-page attribute found. Use something like <body data-page="controller#action" >'
     ;
 
-    if (meta.length === 0) {
-      throw(noMeta);
+    if (dataPage.length === 0) {
+      throw(noDataPage);
     }
 
-    var page = meta.attr("content").toString().split("#")
+    var page = dataPage.split("#")
       , controllerName = page[0]
       , actionName = page[1]
     ;
