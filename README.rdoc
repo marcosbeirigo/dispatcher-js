@@ -18,7 +18,7 @@ Rails developers can use the helper below:
     controller_name.gsub!(/\//, "_")
     controller_name.gsub!(/_controller$/, "")
 
-    "#{controller_name}##{controller.action_name}"
+    raw "#{controller_name}##{controller.action_name}"
   end
 
   <body data-page="<%= dispatcher_page_attribute %>"
